@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ZipCodeResource;
 use App\Models\ZipCode;
 
 class ZipCodeController extends Controller
@@ -13,7 +14,7 @@ class ZipCodeController extends Controller
      */
     public function index()
     {
-        //
+        return ZipCodeResource::collection(ZipCode::paginate(25));
     }
 
     /**
@@ -24,6 +25,6 @@ class ZipCodeController extends Controller
      */
     public function show(ZipCode $zipCode)
     {
-        //
+        return new ZipCodeResource($zipCode);
     }
 }

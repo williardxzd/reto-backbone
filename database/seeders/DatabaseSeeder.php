@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $federal_entities = FederalEntity::factory()->count(5)->create();
-        $municipalities = Municipality::factory()->count(10)->create();
+        $federal_entities = FederalEntity::factory()->count(31)->create();
+        $municipalities = Municipality::factory()->count(100)->create();
 
-        $settlement_types = SettlementType::factory()->count(5)->create();
+        $settlement_types = SettlementType::factory()->count(15)->create();
 
         $federal_entities->each(function($federal_entity) use($municipalities, $settlement_types) {
             $settlements = Settlement::factory()
@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
                 ->create();
 
             ZipCode::factory()
-                ->count(fake()->randomNumber(2))
+                ->count(fake()->randomNumber(3))
                 ->for($federal_entity)
                 ->for($municipalities->random())
                 ->hasAttached($settlements)

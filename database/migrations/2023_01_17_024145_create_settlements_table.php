@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('settlements', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('key')->unique();
+            $table->smallInteger('key');
             $table->string('name');
             $table->string('zone_type')->nullable();
             $table->foreignIdFor(SettlementType::class)->constrained();

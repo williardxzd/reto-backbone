@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('municipalities', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('key')->unique();
+            $table->smallInteger('key');
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();

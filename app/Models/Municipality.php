@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Municipality extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that should be visible in serialization.
+     *
+     * @var array<string>
+     */
+    protected $visible = [
+        'key',
+        'name'
+    ];
 }

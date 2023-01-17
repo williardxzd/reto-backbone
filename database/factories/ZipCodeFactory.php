@@ -18,7 +18,7 @@ class ZipCodeFactory extends Factory
     public function definition()
     {
         return [
-            'zip_code' => fake()->unique()->randomNumber(4),
+            'zip_code' => fake()->randomNumber(4),
             'locality' => strtoupper(fake()->word())
         ];
     }

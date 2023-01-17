@@ -17,7 +17,7 @@ class FederalEntityFactory extends Factory
     public function definition()
     {
         return [
-            'key' => fake()->unique()->randomNumber(3),
+            'key' => fake()->randomNumber(3),
             'name' => strtoupper(fake()->word()),
             'code' => fake()->word()
         ];
