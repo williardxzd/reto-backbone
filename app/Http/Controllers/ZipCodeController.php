@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ZipCodeResource;
 use App\Models\ZipCode;
+use Illuminate\Support\Facades\Log;
 
 class ZipCodeController extends Controller
 {

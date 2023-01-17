@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::controller(ZipCodeController::class)->group(function () {
+Route::controller(ZipCodeController::class)
+    ->group(function () {
     Route::prefix('zip-codes')
         ->as('zip-codes.')
         ->group(function () {

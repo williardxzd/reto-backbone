@@ -27,12 +27,12 @@ class DatabaseSeeder extends Seeder
 
         $federal_entities->each(function($federal_entity) use($municipalities, $settlement_types) {
             $settlements = Settlement::factory()
-                ->count(fake()->randomDigit())
+                ->count(fake()->randomNumber(2))
                 ->for($settlement_types->random())
                 ->create();
 
             ZipCode::factory()
-                ->count(fake()->randomNumber(3))
+                ->count(200)
                 ->for($federal_entity)
                 ->for($municipalities->random())
                 ->hasAttached($settlements)
