@@ -17,7 +17,7 @@ class ZipCodeResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(parent::toArray($request), [
-            'laravel_time' => (LARAVEL_START - microtime(true)) / 60,
+            'laravel_time' => (microtime(true) - LARAVEL_START) / 60,
             'federal_entity' => new FederalEntityResource($this->whenLoaded('federalEntity')),
             'settlements' => SettlementResource::collection($this->whenLoaded('settlements')),
             'municipality' => new MunicipalityResource($this->whenLoaded('municipality'))
