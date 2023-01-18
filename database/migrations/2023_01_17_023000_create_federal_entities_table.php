@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->smallInteger('key');
             $table->string('name');
-            $table->string('code')->nullable();
+            $table->string('code')->nullable()->default(null);
             $table->timestamps();
             $table->softDeletes();
         });

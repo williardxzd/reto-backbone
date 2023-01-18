@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->smallInteger('key');
             $table->string('name');
-            $table->string('zone_type')->nullable();
+            $table->string('zone_type')->nullable()->default(null);
             $table->foreignIdFor(SettlementType::class)->constrained();
             $table->timestamps();
             $table->softDeletes();
