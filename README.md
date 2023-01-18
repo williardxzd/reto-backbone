@@ -173,9 +173,90 @@ Despues de ya tener mi app empece con los testing Unitarios y de Features
 
 <img width="260" alt="Screenshot 2023-01-18 at 13 39 54" src="https://user-images.githubusercontent.com/45053439/213300800-64998fcd-7c3f-4dea-a280-454975774db8.png">
 
-Creo que las pruebas unitarias se pueden explicar solas asi que procedere a mostrar como testeo el endpoint principal de ZipCode
+Creo que las pruebas unitarias se pueden explicar solas asi que procedere a mostrar como testeo el endpoint principal de **ZipCode**
 
-<img width="593" alt="Screenshot 2023-01-18 at 13 41 01" src="https://user-images.githubusercontent.com/45053439/213301020-f9c11770-f85d-4921-9230-7f24d48c3091.png">
+<img width="699" alt="Screenshot 2023-01-18 at 14 57 38" src="https://user-images.githubusercontent.com/45053439/213313554-9ebe53b3-4e5c-4ed6-b57b-087c63247733.png">
 
-- Genero primero un factory de ZipCode que vendra con su relacion de Federal y Municipality por default gracias a su factory
+- Genero primero un factory de **SettlementTypes** para poderlo relacionar con los **Settlements** que creare.
+- Uso el factory de **Settlements** para crear 4 y asocialerles el **Settlement Type** generado anteriormente
+- Creamos el **Zip Code** y hacemos attach los **Settlements**
+- Y hacemos la petición
+
+Aserciones
+- Sacar si el *Zip Code* tiene el mismo valor junto con su campo `jurisdiction`
+- Ver si los **Settlements** vienen con su relacion **Settlement Type**
+- Checar si el JSON cumple con la siguiente estructura
+    - zip_code
+    - locality
+    - federal_entity
+    - settlements
+    - municipality
+
+Con eso terminamos las pruebas.
+
+### Deployment
+
+Despues de esto subimos el proyecto a este repositorio y al App Platform de Digital Ocean:
+
+<img width="1194" alt="Screenshot 2023-01-18 at 15 00 05" src="https://user-images.githubusercontent.com/45053439/213313922-98e339f3-3cc1-4ea5-ac56-0dd12b4939eb.png">
+
+Con cada commit al master se hace deploy en automatico. (No quise hacer algo mas complicado por temas del tiempo)
+
+### Data Upload
+
+El ultimo reto fue la parte de subida de datos, poder agarrar los Spreadsheets, agruparlos en la nueva estructura de datos y posteriormente subirlos. Asi que hice lo siguiente:    
+1. CSV Download
+    - Primero baje un CSV a la vez por cada **Federal Entity** y los fui agrupandos en el folder `storage/app/files` poniendoles el nombre de la entidad
+
+2. Artisan Command
+    - Despues cree un comando de artisan llamado `upload:settlements` para poder crear una logica que lea el csv y que los vaya asociando
+    - Agrupe las columnas en un array para poder hacer mas facil el match
+    - Instale el paquete de [Laravel Excel](https://laravel-excel.com/) para poder hacer la leida del CSV lo mas facil posible
+    - Cree el comando con 3 parametros: Nombre de la entidad, key y filepath
+    - <img width="586" alt="Screenshot 2023-01-18 at 15 07 28" src="https://user-images.githubusercontent.com/45053439/213314873-3e662274-42a6-41bf-a590-fc2a3ee75470.png">
+    - Asi podemos correr el siguiente comando `php artisan upload:settlements 'Aguascalientes' 01 app/files/Aguascalientes.csv` para subir todos los **Settlements** de esa **Federal Entity**
+
+2. Handler
+    - Primero con los parametros de entidad y key creamos la **Federal Entity** si no existe
+    - <img width="706" alt="Screenshot 2023-01-18 at 15 09 23" src="https://user-images.githubusercontent.com/45053439/213315130-92179896-ab10-4522-bf95-019f6e65c3fc.png">
+    - Despues leemos el archivo del CSV seleccionado
+    - <img width="723" alt="Screenshot 2023-01-18 at 15 09 50" src="https://user-images.githubusercontent.com/45053439/213315184-a13d9483-9b5d-45a6-888a-66efb78e57c0.png">
+    - Usamos la funcion de `$this->withProgressBar($slice, function ($row) use ($federal_entity) {` para poder mostrar el progreso de cada registro del csv
+    - Mapeamos el nombre de las columnas con cada record en el csv (para poder hacer un uso legible de cada campo y no usar indices)
+    - <img width="473" alt="Screenshot 2023-01-18 at 15 10 28" src="https://user-images.githubusercontent.com/45053439/213315277-46a4ab30-995e-44ed-9f71-63985e5c64e3.png">
+    - Sacamos la **Municipality** de este **Settlement** y la buscamos o la creamos
+    - <img width="665" alt="Screenshot 2023-01-18 at 15 11 09" src="https://user-images.githubusercontent.com/45053439/213315354-52decb88-0154-4a12-a841-4d03f5927aed.png">
+    - Buscamos o creamos el **Zip Code** con sus relaciones respectivas a **Municipality** y **Federal Entitty** creadas posteriormente
+    - <img width="456" alt="Screenshot 2023-01-18 at 15 11 50" src="https://user-images.githubusercontent.com/45053439/213315440-33ab97b2-0e0a-4c21-bc55-6db0de13c0ee.png">
+    - Buscamos o creamos el **Settlement Type**
+    - <img width="558" alt="Screenshot 2023-01-18 at 15 12 51" src="https://user-images.githubusercontent.com/45053439/213315669-41097f74-7026-4ad5-ad4a-c5fc6ca1af5e.png">
+    - Buscamos o creamos el **Settlement** en cuestion agregando el attach al **Zip Code** y **Settlement Type** creados anteriormente
+    - <img width="465" alt="Screenshot 2023-01-18 at 15 13 14" src="https://user-images.githubusercontent.com/45053439/213315729-ed21e1ef-d8ee-45c9-9269-ba75caf854ca.png">
+    - Repetimos
+
+3. Bash
+    - Para no estar escribiendo un comando a la vez, cree un bash file que tiene todas las **Federal Entities** con su key y archivo respectivo
+    - <img width="881" alt="Screenshot 2023-01-18 at 15 14 49" src="https://user-images.githubusercontent.com/45053439/213315934-d6e61a2b-c392-4966-9963-e6df76c91051.png">
+    - Nomas lo ejecutamos con `bash upload-settlements.sh`
+
+
+### Final
+
+Despues de esto nomas quedamos en testear el endpoint en la nube para visualizar los tiempos de respues
+
+
+<img width="1007" alt="Screenshot 2023-01-18 at 15 16 33" src="https://user-images.githubusercontent.com/45053439/213316183-d95df6a0-e704-490d-90fe-2e5287af10bd.png">
+<img width="1057" alt="Screenshot 2023-01-18 at 15 17 24" src="https://user-images.githubusercontent.com/45053439/213316294-8b8b0687-2cf0-4a49-a067-ffabad6d0eb7.png">
+<img width="1006" alt="Screenshot 2023-01-18 at 15 17 56" src="https://user-images.githubusercontent.com/45053439/213316353-003ce344-6bb8-4ec4-8817-d19fc40a3012.png">
+<img width="1009" alt="Screenshot 2023-01-18 at 15 21 21" src="https://user-images.githubusercontent.com/45053439/213316896-408624c2-4d89-4ef5-a637-d4963eeef48c.png">
+
+
+> Si se dan cuenta el tiempo de respuesta puede ser un poco mas de 300ms pero eso es parte de la plataforma de Digital Ocean ya que estoy usando el servicio mas basico para poder dar de alta el proyecto, tambien cuenta mucho la concurrencia porque a veces el App se detiene y tarda en responder nueva mente.
+
+**Por eso agregue el campo "laravel_time" dentro de cada request, para que puedan ver el tiempo solo de laravel**
+
+### Conclusion
+
+Sin mas por el momento esto es todo el trabajo realiado, muchas gracias.
+
 
