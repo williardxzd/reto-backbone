@@ -2,7 +2,7 @@
 
 php artisan upload:settlements 'Aguascalientes' 01 app/files/Aguascalientes.csv
 php artisan upload:settlements 'Baja California' 02 app/files/Baja_California.csv
-php artisan upload:settlements 'Baja CaliforniaSur' 03 app/files/Baja_California_Sur.csv
+php artisan upload:settlements 'Baja California Sur' 03 app/files/Baja_California_Sur.csv
 php artisan upload:settlements 'Campeche' 04 app/files/Campeche.csv
 php artisan upload:settlements 'Coahuila de Zaragoza' 05 app/files/Coahuila_de_Zaragoza.csv
 php artisan upload:settlements 'Colima' 06 app/files/Colima.csv
