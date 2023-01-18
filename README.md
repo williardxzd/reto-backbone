@@ -260,3 +260,8 @@ Despues de esto nomas quedamos en testear el endpoint en la nube para visualizar
 Sin mas por el momento esto es todo el trabajo realiado, muchas gracias.
 
 
+### Post Data
+
+No estoy muy de acuerdo que no agregaran los acentos en el ejemplo jajaja
+
+<img width="1303" alt="Screenshot 2023-01-18 at 15 29 17" src="https://user-images.githubusercontent.com/45053439/213317820-4fbabbbe-b1c4-471a-a59f-20fbbb893ab0.png">
