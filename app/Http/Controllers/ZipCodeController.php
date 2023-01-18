@@ -21,10 +21,10 @@ class ZipCodeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ZipCode  $zipCode
+     * @param  string  $zipCode
      * @return \Illuminate\Http\Response
      */
-    public function show(ZipCode $zipCode)
+    public function show(Zipcode $zipCode)
     {
         return new ZipCodeResource($zipCode);
     }

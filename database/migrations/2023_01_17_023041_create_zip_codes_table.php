@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create('zip_codes', function (Blueprint $table) {
             $table->id();
-            $table->integer('zip_code')->index();
+            $table->string('zip_code')->index();
             $table->string('locality')->nullable();
             $table->foreignIdFor(FederalEntity::class)->constrained();
             $table->foreignIdFor(Municipality::class)->constrained();

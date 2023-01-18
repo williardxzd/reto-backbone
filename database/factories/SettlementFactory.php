@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\SettlementType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,10 @@ class SettlementFactory extends Factory
         return [
             'key' => fake()->randomNumber(3),
             'name' => strtoupper(fake()->word()),
-            'zone_type' => strtoupper(fake()->word())
+            'zone_type' => strtoupper(fake()->word()),
+            'settlement_type_id' => function() {
+                return SettlementType::factory()->create()->id;
+            }
         ];
     }
 }

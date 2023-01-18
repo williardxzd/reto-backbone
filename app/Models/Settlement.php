@@ -10,6 +10,18 @@ class Settlement extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
+    protected $fillable = [
+        'name', 
+        'key', 
+        'zone_type', 
+        'settlement_type_id'
+    ];
+
+    /**
      * The relations to eager load on every query.
      *
      * @var array
@@ -33,5 +45,13 @@ class Settlement extends Model
     public function settlementType()
     {
         return $this->belongsTo(SettlementType::class);
+    }
+
+    /**
+     * The zipcodes that belong to this settlement.
+     */
+    public function zipCodes()
+    {
+        return $this->belongsToMany(ZipCode::class)->orderBy('zip_code');
     }
 }

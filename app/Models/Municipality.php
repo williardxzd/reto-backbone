@@ -10,6 +10,13 @@ class Municipality extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
+    protected $fillable = ['name', 'key'];
+
+    /**
      * The attributes that should be visible in serialization.
      *
      * @var array<string>

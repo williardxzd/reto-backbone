@@ -10,6 +10,18 @@ class ZipCode extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
+    protected $fillable = [
+        'zip_code',
+        'locality',
+        'municipality_id',
+        'federal_entity_id'
+    ];
+
+    /**
      * The attributes that should be visible in serialization.
      *
      * @var array<string>
@@ -40,7 +52,7 @@ class ZipCode extends Model
      */
     public function settlements()
     {
-        return $this->belongsToMany(Settlement::class);
+        return $this->belongsToMany(Settlement::class)->orderBy('key');
     }
 
     /**
