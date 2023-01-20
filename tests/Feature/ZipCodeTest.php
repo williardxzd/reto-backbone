@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\ZipCode;
+use App\Models\SettlementType;
+use App\Models\Settlement;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -69,14 +71,28 @@ class ZipCodeTest extends TestCase
      */
     public function test_get_one_zip_code()
     {
+        $settlement_type_attributes = [
+            'name' => 'Type'
+        ];
+        $settlement_type = SettlementType::factory()->create($settlement_type_attributes);
+
+        $settlements = Settlement::factory()
+            ->count(4)
+            ->create([
+                'settlement_type_id' => $settlement_type->id
+            ]);
+
         $zip_code = '222';
         $locality = 'Mexicali';
         $zip_code_attributes = [
             'zip_code' => $zip_code, 
             'locality' => $locality
         ];
+
         
-        ZipCode::factory()->create($zip_code_attributes);
+        ZipCode::factory()
+            ->hasAttached($settlements)
+            ->create($zip_code_attributes);
 
         $response = $this->get(route('zip-codes.show', [
             'zip_code' => $zip_code
@@ -84,6 +100,9 @@ class ZipCodeTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonFragment($zip_code_attributes)
+            ->assertJsonFragment([
+                'settlement_type' => $settlement_type
+            ])
             ->assertJsonStructure([
                 'zip_code',
                 'locality',

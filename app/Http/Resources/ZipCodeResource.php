@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Http\Resources\FederalEntityResource;
 use App\Http\Resources\MunicipalityResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Foundation\Application;
 
 class ZipCodeResource extends JsonResource
 {
@@ -17,7 +18,7 @@ class ZipCodeResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(parent::toArray($request), [
-            'laravel_time' => intval((microtime(true) - LARAVEL_START) * 1000) . 'ms',
+            'laravel_time' => config('app.env') != 'testing' ? intval((microtime(true) - LARAVEL_START) * 1000) . 'ms' : null,
             'federal_entity' => new FederalEntityResource($this->whenLoaded('federalEntity')),
             'settlements' => SettlementResource::collection($this->whenLoaded('settlements')),
             'municipality' => new MunicipalityResource($this->whenLoaded('municipality'))
